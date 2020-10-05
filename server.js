@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const errorhandler = require('errorhandler');
 const cors = require('cors');
+const apiRouter = require('./api/api');
 process.env.NODE_ENV = 'development';
 
 app.use(bodyParser.json());
@@ -16,7 +17,7 @@ if (process.env.NODE_ENV === 'development') {
     app.use(errorhandler());
 };
 
-
+app.use('/api', apiRouter());
 
 const PORT = process.env.PORT || 4001;
 
