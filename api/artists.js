@@ -34,10 +34,10 @@ artistRouter.get('/:artistId', (req, res, next) => {
 });
 
 artistRouter.post('/', (req, res, next) => {
-    const name = req.body.name;
-    const dateOfBirth = req.body.dateOfBirth;
-    const biography = req.body.biography;
-    const isCurrentlyEmployed = req.body.isCurrentlyEmployed === 0 ? 0 : 1;
+    const name = req.body.artist.name;
+    const dateOfBirth = req.body.artist.dateOfBirth;
+    const biography = req.body.artist.biography;
+    const isCurrentlyEmployed = req.body.artist.isCurrentlyEmployed === 0 ? 0 : 1;
     if (!name || !dateOfBirth || !biography) {
         return res.sendStatus(400);
     }
@@ -58,6 +58,31 @@ artistRouter.post('/', (req, res, next) => {
                 } else {
                     res.status(201).json({artist: artist});
                 };
+            });
+        };
+    });
+});
+
+artistRouter.put('/:artistId', (req, res, next) => {
+    const name = req.body.artist.name;
+    const dateOfBirth = req.body.artist.dateOfBirth;
+    const biography = req.body.artist.biography;
+    const isCurrentlyEmployed = req.body.artist.isCurrentlyEmployed === 0 ? 0 : 1;
+    if (!name || !dateOfBirth || !biography) {
+        return res.sendStatus(400);
+    }
+    db.run("UPDATE Artist SET name = $name, date_of_birth = $dateOfBirth, biography = $biography, is_currently_employed = $isCurrentlyEmployed WHERE Artist.id = $id;", {
+        $name: name,
+        $dateOfBirth: dateOfBirth,
+        $biography: biography,
+        $isCurrentlyEmployed: isCurrentlyEmployed,
+        $id: req.params.artistId
+    }, (err) => {
+        if (err) {
+            next(err)
+        } else {
+            db.get(`SELECT * FROM Artist WHERE Artist.id = ${req.params.artistId};`, (err, artist) => {
+                res.status(200).json({artist: artist});
             });
         };
     });
