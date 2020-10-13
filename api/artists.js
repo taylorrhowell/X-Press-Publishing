@@ -1,7 +1,6 @@
 const express = require('express');
 const artistRouter = express.Router();
 const sqlite3 = require('sqlite3');
-const apiRouter = require('./api');
 const db = new sqlite3.Database(process.env.TEST_DATABASE || './database.sqlite');
 
 artistRouter.param('artistId', (req, res, next, Id) => {
@@ -24,7 +23,7 @@ artistRouter.get('/', (req, res, next) => {
         if (err) {
             next(err);
         } else {
-            res.status(200).json({ artists: artists})
+            res.status(200).json({artists: artists})
         }
     });
 });
