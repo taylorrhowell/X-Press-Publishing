@@ -6,10 +6,12 @@ const db = new sqlite3.Database(process.env.TEST_DATABASE || './database.sqlite'
 seriesRouter.param('seriesId', (req, res, next, seriesId) => {
     db.get(`SELECT * FROM Series WHERE id = ${seriesId};`, (err, series) => {
         if (err) {
-            res.sendStatus(404);
-        } else {
+            next(err);
+        } else if (series){
             req.series = series;
             next();
+        } else {
+            res.sendStatus(404);
         }
     })
 });
@@ -22,6 +24,10 @@ seriesRouter.get('/', (req, res, next) => {
             res.status(200).json({series: series});
         }
     });
+});
+
+seriesRouter.get('/:seriesId', (req, res, next) => {
+    res.status(200).json({series: req.series});
 });
 
 module.exports = seriesRouter;
