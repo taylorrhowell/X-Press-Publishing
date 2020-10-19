@@ -103,4 +103,14 @@ issuesRouter.put('/:issueId', (req, res, next) => {
     };
 });
 
+issuesRouter.delete('/:issueId', (req, res, next) => {
+    db.run(`DELETE FROM Issue WHERE id = ${req.params.issueId};`, function(err) {
+        if(err) {
+            next(err);
+        } else {
+            res.sendStatus(204);
+        };
+    });
+});
+
 module.exports = issuesRouter;
