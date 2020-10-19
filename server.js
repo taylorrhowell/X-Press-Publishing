@@ -16,7 +16,7 @@ app.use(errorhandler());
 
 app.use('/api', apiRouter);
 
-const PORT = process.env.PORT || 4001;
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
     console.log(`CORS-enabled web server listening on port ${PORT}`)
